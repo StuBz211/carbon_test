@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='datatables.min.css') }}"/>
+</head>
+<body>
+
+<div class="container">
+    <div class="container-fluid">
+        <h2>Система сбора информации</h2>
+        <table class="table table-striped table-bordered table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Тип сведений</th>
+              <th scope="col">MIN CPU</th>
+              <th scope="col">MAX CPU</th>
+              <th scope="col">AVG CPU</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>Общие сведния</td>
+                <td>{{total_metrics.min_cpu}}</td>
+                <td>{{total_metrics.max_cpu}}</td>
+                <td>{{total_metrics.avg_cpu}}</td>
+            </tr>
+            <tr>
+                <td>за последний 100 записей</td>
+                <td>{{local_metrics.min_cpu}}</td>
+                <td>{{local_metrics.max_cpu}}</td>
+                <td>{{local_metrics.avg_cpu}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr>
+        <table id="sort-table" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+
+            <tr>
+                <th class="th-sm">№</th>
+                <td class="th-sm">CPU</td>
+                <td class="th-sm">Datetime</td>
+            </tr>
+            </thead>
+            <tbody>
+                {% for metric in metrics%}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ metric.cpu_value }}</td>
+                    <td>{{ metric.pub_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.slim.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $('#sort-table').DataTable({
+        pageLength: 100,
+        lengthMenu: [10, 20, 50, 100],
+    });
+} );
+</script>
+</body>
+</html>
